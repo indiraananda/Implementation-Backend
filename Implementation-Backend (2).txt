@@ -1,0 +1,35 @@
+1. SELECT * FROM employees;
+2. SELECT COUNT(*) AS jumlah_entri FROM employees WHERE Manager;
+3. SELECT name, salary FROM employees WHERE departement IN ('Sales', 'Marketing');
+4. SELECT AVG(salary) AS rata_rata_gaji FROM employeess where joined_date;
+5. SELECT * FROM ('sales_date', 'employees') ORDER BY sales DESC LIMIT 5;
+6. SELECT name, salary
+FROM employees
+JOIN (
+    SELECT departement, AVG(salary)
+    FROM employees_id
+    GROUP BY departement
+    HAVING AVG(salary) > (SELECT AVG(salary) FROM employees_id)
+) d ON employees_id = departement;
+7. SELECT employee_id, sales
+FROM (
+    SELECT name, SUM(sales),
+           ROW_NUMBER() OVER (ORDER BY SUM(sales) DESC)
+    FROM employees
+    JOIN sales_data ON employee_id = employee_id
+    GROUP BY name
+);
+8. DELIMITER //
+
+CREATE PROCEDURE GetEmployeesAndTotalSalary (IN department VARCHAR(255))
+BEGIN
+    SELECT name, salary
+    FROM employees
+    
+    SELECT SUM(salary)
+    FROM employees
+END//
+
+DELIMITER ;
+
+
